@@ -31,8 +31,23 @@ services:
       JWT_SECRET: dev-secret-change-in-prod
       PORT: 3001
       NODE_ENV: development
+      CORS_ORIGIN: http://localhost:3000
     ports:
       - '3001:3001'
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm i -g pnpm && pnpm --filter @clutch/web dev"
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
