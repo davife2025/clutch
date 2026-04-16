@@ -1,0 +1,13 @@
+{
+  "name": "@clutch/mobile",
+  "version": "0.0.1",
+  "scripts": { "dev": "expo start", "build": "expo build", "lint": "eslint src" },
+  "dependencies": {
+    "@clutch/core": "workspace:*",
+    "@clutch/ui": "workspace:*",
+    "@clutch/wallet-connectors": "workspace:*",
+    "expo": "~51.0.0",
+    "react": "18.2.0",
+    "react-native": "0.74.0"
+  }
+}
