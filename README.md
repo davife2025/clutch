@@ -2,67 +2,84 @@
 
 > **Your wallets. Always there.**
 
-Clutch is a unified wallet pocket — a persistent, unforgettable home for all your crypto wallets (cold, hot, hardware) plus native fund holding. Think of it as the fixed pocket in your trousers: it never falls out, it holds everything, and an AI agent can reach in and pay for things on your behalf.
+Clutch is a unified wallet pocket — a persistent home for all your crypto wallets (cold, hot, hardware) plus native fund holding. An AI agent can reach in and pay for things across wallets on your behalf using the x402 protocol.
 
 ---
 
-## What is Clutch?
+## Progress
 
-| Problem | Clutch's Solution |
-|---|---|
-| Hardware/cold wallets get lost or forgotten | All wallets live in your Pocket — always accessible |
-| Juggling multiple wallets across chains | One view, all balances, all wallets |
-| Paying for things across chains is manual | AI agent selects optimal wallet + executes via x402 |
-| Holding funds requires a separate wallet | Native balance built into the Pocket |
+| Session | What | Status |
+|---|---|---|
+| 1 | Core types · DB schema · Auth · Pocket + Wallet CRUD | ✅ Done |
+| 2 | Balance sync service · Price service · Balance routes | ✅ Done |
+| 3 | EVM connector (viem) · Solana connector · Hardware stub · ConnectorRegistry | ✅ Done |
+| 4 | Next.js web app · Pocket dashboard · Connect wallet UI | 🔜 |
+| 5 | Native fund deposit/withdraw · On-chain tx flow | 🔜 |
+| 6 | AI agent · Claude API · Smart payment routing | 🔜 |
+| 7 | x402 payment client · Agent-driven pay flow | 🔜 |
+| 8 | Expo mobile · Ledger/Trezor · Mainnet launch | 🔜 |
 
 ---
 
-## Monorepo Structure
+## Monorepo
 
 ```
 clutch/
 ├── apps/
-│   ├── web/          — Next.js web app
-│   ├── mobile/       — Expo React Native app  
-│   └── api/          — Hono API server
+│   ├── api/          Hono API server (Sessions 1-3)
+│   ├── web/          Next.js web app (Session 4)
+│   └── mobile/       Expo React Native (Session 8)
 └── packages/
-    ├── core/             — Shared types & business logic
-    ├── ui/               — Design system components
-    ├── wallet-connectors/— EVM, Solana, hardware wallet adapters
-    ├── ai-agent/         — AI agent for smart payments & analysis
-    └── x402/             — HTTP 402 payment protocol client
+    ├── core/             Types · pocket logic · utils · constants
+    ├── wallet-connectors EVM (viem) · Solana · Hardware stub · Registry
+    ├── ai-agent/         Claude-powered wallet agent (Session 6)
+    ├── x402/             HTTP 402 payment client (Session 7)
+    └── ui/               Shared component library (Session 4)
 ```
+
+---
+
+## Quick Start
+
+```bash
+# 1. Install
+pnpm install
+
+# 2. Configure
+cp .env.example .env
+
+# 3. Start DB + run migrations
+bash scripts/setup.sh
+
+# 4. Dev
+pnpm dev
+```
+
+API runs at `http://localhost:3001`. See `docs/api.md` for full reference.
+
+---
+
+## Supported Chains
+
+| Chain | Native | USDC | USDT | Other |
+|---|---|---|---|---|
+| Ethereum | ETH | ✅ | ✅ | DAI, WBTC |
+| Base | ETH | ✅ | — | DAI |
+| Polygon | MATIC | ✅ | ✅ | — |
+| Arbitrum | ETH | ✅ | — | ARB |
+| Optimism | ETH | ✅ | — | OP |
+| Solana | SOL | ✅ | ✅ | BONK, JUP |
 
 ---
 
 ## Tech Stack
 
-- **Monorepo**: Turborepo + pnpm workspaces
-- **API**: Hono (lightweight, edge-ready)
-- **Web**: Next.js 14
-- **Mobile**: Expo (React Native)
-- **Wallet Layer**: viem/wagmi (EVM), @solana/wallet-adapter
-- **Payments**: x402 protocol
-- **AI Agent**: Claude API
-- **Language**: TypeScript throughout
-
----
-
-## Getting Started
-
-```bash
-pnpm install
-pnpm dev
-```
-
----
-
-## Roadmap
-
-- [ ] Core pocket creation & wallet aggregation
-- [ ] EVM + Solana wallet connectors
-- [ ] Native fund holding
-- [ ] AI agent — wallet analysis & insights
-- [ ] x402 payment execution
-- [ ] Hardware wallet support (Ledger, Trezor)
-- [ ] Mobile app
+- **Runtime**: Node.js 20, pnpm workspaces, Turborepo
+- **API**: Hono
+- **DB**: PostgreSQL + Drizzle ORM
+- **EVM**: viem
+- **Solana**: @solana/web3.js + @solana/spl-token
+- **AI**: Anthropic Claude API (Session 6)
+- **Payments**: x402 protocol (Session 7)
+- **Web**: Next.js 14 (Session 4)
+- **Mobile**: Expo (Session 8)

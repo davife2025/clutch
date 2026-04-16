@@ -1,6 +1,5 @@
-// @clutch/wallet-connectors
-// Adapters for connecting cold, hot, and hardware wallets
-
-export * from './connector'
-export * from './providers/evm'
-export * from './providers/solana'
+export * from './connector.js'
+export * from './registry.js'
+export * from './providers/evm.js'
+export * from './providers/solana.js'
+export * from './providers/hardware.js'

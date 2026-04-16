@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "Clutch — Your wallets. Always there.",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -28,8 +25,5 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
-  "packageManager": "pnpm@9.0.0",
-  "main": "index.js",
-  "author": "",
-  "license": "ISC"
+  "packageManager": "pnpm@9.0.0"
 }
