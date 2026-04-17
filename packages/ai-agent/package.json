@@ -5,10 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" }
   },
   "scripts": {
     "build": "tsc",
@@ -17,7 +14,6 @@
   "dependencies": {
     "@clutch/core": "workspace:*",
     "@clutch/wallet-connectors": "workspace:*",
-    "@clutch/x402": "workspace:*",
     "@anthropic-ai/sdk": "^0.24.0"
   }
 }

@@ -1,5 +1,4 @@
-// @clutch/x402
-// HTTP 402 Payment Required — pay-per-use and streaming payments
-
-export * from './client'
-export * from './types'
+export * from './types.js'
+export * from './client.js'
+export * from './signer.js'
+export * from './server.js'
