@@ -1,7 +1,11 @@
-// ─── Wallet ───────────────────────────────────────────────────────────────────
+// ─── Chain ────────────────────────────────────────────────────────────────────
+
+/** Solana is the primary chain. EVM chains are supported as secondary. */
+export type ChainId = 'solana' | 'ethereum' | 'base' | 'polygon' | 'arbitrum' | 'optimism'
 
 export type WalletType = 'hot' | 'cold' | 'hardware' | 'native'
-export type ChainId = 'ethereum' | 'base' | 'polygon' | 'solana' | 'arbitrum' | 'optimism'
+
+// ─── Wallet ───────────────────────────────────────────────────────────────────
 
 export interface Wallet {
   id: string
@@ -17,21 +21,22 @@ export interface Wallet {
 export interface WalletBalance {
   walletId: string
   chain: ChainId
-  token: string         // 'ETH', 'USDC', 'SOL', etc.
+  token: string          // 'SOL', 'USDC', 'BONK', 'JUP', 'ETH', etc.
   amount: bigint
   decimals: number
   usdValue?: number
   fetchedAt: Date
 }
 
-// ─── Pocket ────────────────────────────────────────────────────────────────────
+// ─── Pocket ───────────────────────────────────────────────────────────────────
 
 export interface Pocket {
   id: string
   ownerId: string
   name: string
   wallets: Wallet[]
-  nativeBalance: bigint  // stored in wei (18 decimals)
+  /** Native balance in lamports (1 SOL = 1_000_000_000 lamports) */
+  nativeBalance: bigint
   createdAt: Date
   updatedAt: Date
 }
@@ -42,7 +47,7 @@ export interface PocketSummary {
   balances: WalletBalance[]
 }
 
-// ─── User ──────────────────────────────────────────────────────────────────────
+// ─── User ─────────────────────────────────────────────────────────────────────
 
 export interface User {
   id: string
@@ -55,7 +60,7 @@ export interface User {
 // ─── Transactions ─────────────────────────────────────────────────────────────
 
 export type TxStatus = 'pending' | 'confirmed' | 'failed'
-export type TxType = 'deposit' | 'withdraw' | 'payment' | 'transfer'
+export type TxType   = 'deposit' | 'withdraw' | 'payment' | 'transfer'
 
 export interface Transaction {
   id: string
@@ -81,9 +86,9 @@ export interface PaymentIntent {
   amount: bigint
   token: string
   chain: ChainId
-  fromWalletId?: string   // if omitted, AI agent decides
+  fromWalletId?: string
   memo?: string
-  x402?: boolean          // whether this is an x402 auto-payment
+  x402?: boolean
 }
 
 export interface PaymentResult {
@@ -94,19 +99,8 @@ export interface PaymentResult {
   fee?: bigint
 }
 
-// ─── API responses ────────────────────────────────────────────────────────────
+// ─── API ──────────────────────────────────────────────────────────────────────
 
-export interface ApiResponse<T> {
-  data: T
-  error?: never
-}
-
-export interface ApiError {
-  data?: never
-  error: {
-    code: string
-    message: string
-  }
-}
-
+export interface ApiResponse<T> { data: T; error?: never }
+export interface ApiError { data?: never; error: { code: string; message: string } }
 export type ApiResult<T> = ApiResponse<T> | ApiError

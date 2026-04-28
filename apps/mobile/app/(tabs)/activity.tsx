@@ -41,7 +41,7 @@ export default function ActivityScreen() {
                   <Text style={s.addr}>{truncateAddress(tx.toAddress)} · {tx.pocketName}</Text>
                 </View>
                 <View style={s.right}>
-                  <Text style={s.amount}>{(Number(tx.amount) / 1e18).toFixed(4)} {tx.token}</Text>
+                  <Text style={s.amount}>{(Number(tx.amount) / 1e9).toFixed(4)} {tx.token}</Text>
                   <Text style={s.time}>{timeAgo(tx.createdAt)}</Text>
                 </View>
               </View>

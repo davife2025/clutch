@@ -29,7 +29,7 @@ export function TransactionList({ transactions }: { transactions: any[] }) {
     <div className="card divide-y divide-zinc-800">
       {transactions.map((tx) => {
         const { icon: Icon, color, bg } = TX_ICONS[tx.type] ?? TX_ICONS.transfer
-        const amount = (Number(tx.amount) / 1e18).toFixed(6)
+        const amount = (Number(tx.amount) / 1e9).toFixed(6)
         return (
           <div key={tx.id} className="flex items-center gap-4 p-4 hover:bg-zinc-800/30 transition-colors">
             <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center shrink-0', bg)}>

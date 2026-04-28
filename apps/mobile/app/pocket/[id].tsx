@@ -186,7 +186,7 @@ export default function PocketScreen() {
                     <Text style={s.txAddr}>{truncateAddress(tx.toAddress)}</Text>
                   </View>
                   <View style={s.txRight}>
-                    <Text style={s.txAmount}>{(Number(tx.amount) / 1e18).toFixed(4)} {tx.token}</Text>
+                    <Text style={s.txAmount}>{(Number(tx.amount) / 1e9).toFixed(4)} {tx.token}</Text>
                     <Text style={s.txTime}>{timeAgo(tx.createdAt)}</Text>
                   </View>
                 </View>

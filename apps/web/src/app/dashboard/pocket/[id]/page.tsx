@@ -82,7 +82,7 @@ export default function PocketDetailPage() {
         </div>
         <div className="card p-5">
           <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Native balance</p>
-          <p className="text-2xl font-bold text-white">{(Number(pocket.nativeBalance ?? 0) / 1e18).toFixed(6)} ETH</p>
+          <p className="text-2xl font-bold text-white">{(Number(pocket.nativeBalance ?? 0) / 1e9).toFixed(6)} SOL</p>
         </div>
       </div>
 

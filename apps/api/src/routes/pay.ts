@@ -45,7 +45,7 @@ payRoutes.post('/:id/pay', async (c) => {
   if (!wallet) return c.json({ error: { code: 'NOT_FOUND', message: 'Wallet not found' } }, 404)
 
   // Record intent
-  const decimals = token === 'SOL' ? 9 : token === 'USDC' || token === 'USDT' ? 6 : 18
+  const decimals = token === 'SOL' || token === 'mSOL' || token === 'stSOL' ? 9 : token === 'USDC' || token === 'USDT' || token === 'JUP' || token === 'RAY' ? 6 : 9
   const amountWei = BigInt(Math.floor(Number(amount) * 10 ** decimals))
 
   const [tx] = await db.insert(transactions).values({
