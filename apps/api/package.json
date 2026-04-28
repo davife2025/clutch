@@ -24,7 +24,8 @@
     "@clutch/multisig": "workspace:*",
     "@clutch/subscriptions": "workspace:*",
     "@clutch/nft": "workspace:*",
-    "@clutch/walletconnect": "workspace:*"
+    "@clutch/walletconnect": "workspace:*",
+    "@clutch/governance": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.11.0",

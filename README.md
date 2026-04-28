@@ -57,3 +57,6 @@ SOL · USDC · USDT · BONK · JUP · RAY · ORCA · mSOL · stSOL · WIF · PYT
 ## Tech stack
 
 Hono · PostgreSQL · Drizzle · @solana/web3.js · @solana/spl-token · viem (EVM) · Claude AI · x402 · Next.js 14 · Expo SDK 51 · Turborepo
+
+| 19 | Realms DAO governance · proposals · voting power · cast vote | ✅ |
+| 20 | Chrome extension · Manifest V3 · Wallet Standard injection · popup wallet | ✅ |
