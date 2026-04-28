@@ -10,7 +10,7 @@ if [ ! -f .env ]; then
   echo "✅ Created .env — update your DATABASE_URL before continuing"
 fi
 
-docker compose up -d postgres
+docker compose up -d supabase
 echo "⏳ Waiting for Postgres to be ready..."
 sleep 4
 

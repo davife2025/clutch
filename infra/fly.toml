@@ -1,0 +1,47 @@
+# fly.toml — deploy the Clutch API to Fly.io
+# https://fly.io/docs/reference/configuration/
+
+app    = "clutch-api"
+primary_region = "iad"   # US East — closest to most Solana validators
+
+[build]
+  dockerfile = "apps/api/Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT     = "3001"
+  # Secrets set via: fly secrets set DATABASE_URL=... SUPABASE_URL=... etc.
+
+[http_service]
+  internal_port       = 3001
+  force_https         = true
+  auto_stop_machines  = false    # keep warm for low-latency Solana RPCs
+  auto_start_machines = true
+  min_machines_running = 2       # always 2 replicas in prod
+
+  [http_service.concurrency]
+    type       = "requests"
+    soft_limit = 200
+    hard_limit = 250
+
+[[vm]]
+  size       = "performance-2x"  # 2 vCPU, 4 GB — handles Solana RPC + AI calls
+  memory     = "4gb"
+
+[checks]
+  [checks.health]
+    grace_period = "10s"
+    interval     = "15s"
+    method       = "GET"
+    path         = "/health"
+    protocol     = "http"
+    timeout      = "5s"
+    tls_skip_verify = false
+
+[[mounts]]
+  source      = "clutch_data"
+  destination = "/data"
+
+[metrics]
+  port = 9091
+  path = "/metrics"

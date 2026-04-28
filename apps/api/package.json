@@ -27,7 +27,9 @@
     "@clutch/walletconnect": "workspace:*",
     "@clutch/governance": "workspace:*",
     "@clutch/solanapay": "workspace:*",
-    "@clutch/bridge": "workspace:*"
+    "@clutch/bridge": "workspace:*",
+    "@clutch/anchor": "workspace:*",
+    "@supabase/supabase-js": "^2.45.0"
   },
   "devDependencies": {
     "tsx": "^4.11.0",

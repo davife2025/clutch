@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Wallet, ArrowLeftRight, Settings, LogOut, Sparkles, Repeat2, Users, BarChart2, CreditCard, Image, Globe, TrendingUp, Vote, QrCode, Shuffle } from 'lucide-react'
+import { LayoutDashboard, Wallet, ArrowLeftRight, Settings, LogOut, Sparkles, Repeat2, Users, BarChart2, CreditCard, Image, Globe, TrendingUp, Vote, QrCode, Shuffle, Code } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { logoutUser } from '@/lib/auth'
 
@@ -19,6 +19,7 @@ const NAV = [
   { href: '/dashboard/governance',     label: 'Governance', icon: Vote      },
   { href: '/dashboard/pay',            label: 'Solana Pay', icon: QrCode   },
   { href: '/dashboard/bridge',         label: 'Bridge',     icon: Shuffle  },
+  { href: '/dashboard/programs',       label: 'Programs',   icon: Code     },
   { href: '/dashboard/activity',  label: 'Activity',   icon: ArrowLeftRight },
   { href: '/dashboard/settings',  label: 'Settings',   icon: Settings },
 ]

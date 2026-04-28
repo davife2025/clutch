@@ -1,0 +1,43 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: production
+    service:     clutch
+
+rule_files:
+  - "alerts.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+
+  # Clutch API — custom /metrics endpoint
+  - job_name: clutch-api
+    static_configs:
+      - targets: ["api:3001"]
+    metrics_path: /metrics
+    scrape_interval: 10s
+
+  # Node exporter — host machine metrics
+  - job_name: node
+    static_configs:
+      - targets: ["node-exporter:9100"]
+
+  # PostgreSQL exporter
+  - job_name: postgres
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+
+  # Redis exporter
+  - job_name: redis
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+
+  # nginx exporter
+  - job_name: nginx
+    static_configs:
+      - targets: ["nginx-exporter:9113"]
