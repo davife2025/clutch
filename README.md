@@ -32,6 +32,8 @@ EVM chains (Ethereum, Base, Polygon, Arbitrum, Optimism) are supported as second
 | 14 | Analytics + reporting · P&L charts · breakdown · CSV export 
 | 15 | NFT portfolio · DAS client · Metaplex · Magic Eden pricing | ✅ |
 | 16 | WalletConnect + dApp browser · Wallet Standard · session mgmt | ✅ | · P\&L charts · breakdown · CSV export | ✅ |
+| 17 | Solana staking · native stake accounts · liquid staking · validator dashboard | ✅ |
+| 18 | Developer SDK · ClutchClient · React hooks · ClutchProvider · full API coverage | ✅ |
 
 ---
 

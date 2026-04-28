@@ -1,0 +1,23 @@
+{
+  "name": "@clutch/sdk",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Clutch developer SDK — embed wallet pockets in any Solana app",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".":         { "import": "./dist/index.js",              "types": "./dist/index.d.ts" },
+    "./react":   { "import": "./dist/react/index.js",        "types": "./dist/react/index.d.ts" },
+    "./node":    { "import": "./dist/client/node.js",        "types": "./dist/client/node.d.ts" }
+  },
+  "scripts": { "build": "tsc", "dev": "tsc --watch", "test": "vitest" },
+  "dependencies": {
+    "@clutch/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true }
+  }
+}
