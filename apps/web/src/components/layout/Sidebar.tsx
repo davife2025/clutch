@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Wallet, ArrowLeftRight, Settings, LogOut, Sparkles, Repeat2, Users } from 'lucide-react'
+import { LayoutDashboard, Wallet, ArrowLeftRight, Settings, LogOut, Sparkles, Repeat2, Users, BarChart2, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { logoutUser } from '@/lib/auth'
 
@@ -11,6 +11,8 @@ const NAV = [
   { href: '/dashboard/agent',     label: 'AI Agent',   icon: Sparkles },
   { href: '/dashboard/defi',      label: 'DeFi',       icon: Repeat2  },
   { href: '/dashboard/team',      label: 'Team',       icon: Users    },
+  { href: '/dashboard/analytics',  label: 'Analytics',  icon: BarChart2 },
+  { href: '/dashboard/subscriptions', label: 'Plans',    icon: CreditCard },
   { href: '/dashboard/activity',  label: 'Activity',   icon: ArrowLeftRight },
   { href: '/dashboard/settings',  label: 'Settings',   icon: Settings },
 ]

@@ -185,3 +185,75 @@ export type TeamPocketRow  = typeof teamPockets.$inferSelect
 export type TeamMemberRow  = typeof teamMembers.$inferSelect
 export type ProposalRow    = typeof proposals.$inferSelect
 export type AuditLogRow    = typeof auditLog.$inferSelect
+
+// ─── Subscriptions + token gating (Session 13) ────────────────────────────────
+
+export const subscriptionStatusEnum = pgEnum('subscription_status', ['active','past_due','cancelled','trialing','expired'])
+export const billingPeriodEnum       = pgEnum('billing_period',      ['daily','weekly','monthly','annual'])
+
+export const subscriptionPlans = pgTable('subscription_plans', {
+  id:            uuid('id').primaryKey().defaultRandom(),
+  name:          text('name').notNull(),
+  description:   text('description'),
+  priceUsd:      integer('price_usd').notNull(),         // cents
+  billingPeriod: billingPeriodEnum('billing_period').notNull(),
+  token:         text('token').notNull().default('USDC'),
+  priceRaw:      text('price_raw').notNull(),
+  chain:         chainIdEnum('chain').notNull().default('solana'),
+  payTo:         text('pay_to').notNull(),
+  features:      text('features').notNull().default('[]'),   // JSON
+  active:        boolean('active').notNull().default(true),
+  createdAt:     timestamp('created_at').defaultNow().notNull(),
+})
+
+export const subscriptions = pgTable('subscriptions', {
+  id:                 uuid('id').primaryKey().defaultRandom(),
+  userId:             uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  planId:             uuid('plan_id').notNull().references(() => subscriptionPlans.id),
+  status:             subscriptionStatusEnum('status').notNull().default('active'),
+  currentPeriodStart: timestamp('current_period_start').notNull(),
+  currentPeriodEnd:   timestamp('current_period_end').notNull(),
+  cancelAtPeriodEnd:  boolean('cancel_at_period_end').notNull().default(false),
+  payerAddress:       text('payer_address').notNull(),
+  lastTxHash:         text('last_tx_hash'),
+  createdAt:          timestamp('created_at').defaultNow().notNull(),
+  updatedAt:          timestamp('updated_at').defaultNow().notNull(),
+}, (t) => [
+  index('sub_user_idx').on(t.userId),
+  index('sub_status_idx').on(t.status),
+])
+
+export const tokenGates = pgTable('token_gates', {
+  id:                 uuid('id').primaryKey().defaultRandom(),
+  name:               text('name').notNull(),
+  condition:          text('condition').notNull(),  // GateCondition
+  token:              text('token'),
+  mintAddress:        text('mint_address'),
+  minAmount:          text('min_amount'),
+  collectionAddress:  text('collection_address'),
+  planId:             uuid('plan_id').references(() => subscriptionPlans.id),
+  createdAt:          timestamp('created_at').defaultNow().notNull(),
+})
+
+export const usageRecords = pgTable('usage_records', {
+  id:             uuid('id').primaryKey().defaultRandom(),
+  subscriptionId: uuid('subscription_id').notNull().references(() => subscriptions.id, { onDelete: 'cascade' }),
+  userId:         uuid('user_id').notNull().references(() => users.id),
+  metric:         text('metric').notNull(),
+  quantity:       integer('quantity').notNull().default(1),
+  recordedAt:     timestamp('recorded_at').defaultNow().notNull(),
+}, (t) => [index('usage_sub_idx').on(t.subscriptionId)])
+
+// ─── Portfolio snapshots (Session 14) ─────────────────────────────────────────
+
+export const portfolioSnapshots = pgTable('portfolio_snapshots', {
+  id:           uuid('id').primaryKey().defaultRandom(),
+  pocketId:     uuid('pocket_id').notNull().references(() => pockets.id, { onDelete: 'cascade' }),
+  totalUsd:     integer('total_usd').notNull(),      // stored as cents
+  nativeSol:    text('native_sol').notNull(),         // lamports as string
+  balances:     text('balances').notNull(),           // JSON snapshot
+  takenAt:      timestamp('taken_at').defaultNow().notNull(),
+}, (t) => [
+  index('snapshots_pocket_idx').on(t.pocketId),
+  index('snapshots_taken_idx').on(t.takenAt),
+])
