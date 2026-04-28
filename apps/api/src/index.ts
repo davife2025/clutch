@@ -11,7 +11,11 @@ import { healthRoutes }      from './routes/health.js'
 import { fundsRoutes }       from './routes/funds.js'
 import { webhookRoutes }     from './routes/webhook.js'
 import { payRoutes }         from './routes/pay.js'
+import { defiRoutes }        from './routes/defi.js'
+import { wsRoutes }          from './routes/ws.js'
+import { pushRoutes }        from './routes/push.js'
 import { errorMiddleware }   from './middleware/error.js'
+import { startPollers }      from './services/realtime.service.js'
 
 const app = new Hono()
 
@@ -20,7 +24,7 @@ app.use('*', cors({ origin: process.env.CORS_ORIGIN ?? '*' }))
 app.use('*', errorMiddleware)
 
 app.get('/health', (c) =>
-  c.json({ status: 'ok', service: 'clutch-api', version: '0.7.0', timestamp: new Date().toISOString() })
+  c.json({ status: 'ok', service: 'clutch-api', version: '0.11.0', timestamp: new Date().toISOString() })
 )
 
 app.route('/health',       healthRoutes)
@@ -33,10 +37,17 @@ app.route('/balances',     balanceRoutes)
 app.route('/agent',        agentRoutes)
 app.route('/transactions', transactionRoutes)
 app.route('/webhook',      webhookRoutes)
+app.route('/defi',         defiRoutes)
+app.route('/ws',           wsRoutes)
+app.route('/push',         pushRoutes)
 
 app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Route not found' } }, 404))
 
+// Start real-time pollers
+startPollers()
+
 const port = Number(process.env.PORT ?? 3001)
-console.log(`🫙  Clutch API v0.7.0  →  http://localhost:${port}`)
+console.log(`🫙  Clutch API v0.11.0  →  http://localhost:${port}`)
+console.log(`   WebSocket          →  ws://localhost:${port}/ws`)
 
 export default { port, fetch: app.fetch }

@@ -25,9 +25,9 @@ EVM chains (Ethereum, Base, Polygon, Arbitrum, Optimism) are supported as second
 |---|---|---|
 | 1–8 | Foundation → Mobile launch | ✅ |
 | 9 | Test suite (Vitest + Playwright + CI) | ✅ |
-| 10 | DeFi integrations (swaps, yield, gas tracker) | 🔜 Next |
-| 11 | Real-time + push notifications | 🔜 |
-| 12 | Multi-sig + team pockets | 🔜 |
+| 10 | DeFi: Jupiter swaps · yield · gas tracker · price alerts | ✅ |
+| 11 | Real-time: WebSocket · Expo push · live balance + prices | ✅ |
+| 12 | Multi-sig + team pockets | 🔜 Next |
 
 ---
 
