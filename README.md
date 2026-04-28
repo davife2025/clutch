@@ -2,22 +2,22 @@
 
 > **Your wallets. Always there.**
 
-Unified crypto wallet pocket with AI-powered payment routing and x402 autonomous payments.
+Clutch is a unified crypto wallet pocket — a fixed, persistent home for all your wallets (hot, cold, hardware) across every chain. It holds funds natively, aggregates balances in real time, and ships an AI agent powered by Claude that reasons across your wallets to route payments intelligently. The x402 layer lets the agent pay for things on your behalf with zero friction.
 
 ---
 
-## Progress
+## All 8 Sessions Complete ✅
 
-| Session | What | Status |
+| # | Session | What was built |
 |---|---|---|
-| 1 | Core types · DB schema · Auth · Pocket & Wallet CRUD | ✅ |
-| 2 | Balance sync · Price service · CoinGecko integration | ✅ |
-| 3 | EVM connector (viem) · Solana connector · Registry | ✅ |
-| 4 | Next.js web app · Dashboard · Wallet UI | ✅ |
-| 5 | Native fund deposit/withdraw · Tx webhook | ✅ |
-| 6 | AI agent · Claude tool-use loop · Streaming chat · Analysis | ✅ |
-| 7 | x402 payment protocol · Agent signer · One-shot pay | ✅ |
-| 8 | Expo mobile · Ledger/Trezor · Mainnet launch | 🔜 Next |
+| 1 | Foundation | Core types · DB schema · Auth · Pocket & Wallet CRUD |
+| 2 | Balance layer | Live balance sync · CoinGecko prices · Balance routes |
+| 3 | Wallet connectors | EVM (viem) · Solana · ConnectorRegistry · public RPC fallbacks |
+| 4 | Web app | Next.js 14 · Dark dashboard · Wallet cards · Sync UI |
+| 5 | Native funds | Deposit/withdraw ETH · FundsService · Tx webhook |
+| 6 | AI agent | Claude tool-use loop · Pocket analysis · SSE chat |
+| 7 | x402 payments | HTTP 402 client · Agent signer · One-shot pay endpoint |
+| 8 | Mobile + launch | Expo app · Ledger/Trezor connectors · EAS build · Launch checklist |
 
 ---
 
@@ -25,51 +25,31 @@ Unified crypto wallet pocket with AI-powered payment routing and x402 autonomous
 
 ```bash
 pnpm install
-cp .env.example .env   # add ANTHROPIC_API_KEY for sessions 6+7
-bash scripts/setup.sh
-pnpm dev
-# API → :3001  |  Web → :3000
+cp .env.example .env          # add DATABASE_URL + ANTHROPIC_API_KEY
+bash scripts/setup.sh         # start postgres + run migrations
+pnpm dev                      # API :3001 · Web :3000
+
+# Mobile
+cd apps/mobile
+cp .env.example .env.local
+npx expo start
 ```
 
 ---
 
-## AI Agent (Session 6)
+## What Clutch does
 
-The agent uses Claude with tool use to reason across your wallets:
+**One pocket, all wallets** — Connect Ethereum, Base, Polygon, Arbitrum, Optimism, and Solana wallets. Hot wallets, cold wallets, Ledger hardware wallets — they all live in the same place.
 
-```
-POST /agent/analyze/:pocketId      → portfolio health score + insights
-POST /agent/resolve-payment        → pick best wallet for a payment
-POST /agent/chat/:pocketId         → streaming SSE chat
-```
+**Native balance** — Hold ETH directly in the pocket without needing a separate wallet. Deposit and withdraw on demand.
 
-The tool loop:
-1. Claude calls `get_wallet_balance` — fetches live balances
-2. Claude calls `estimate_gas_fee` — compares chains
-3. Claude calls `get_token_price` — USD conversion
-4. Claude calls `select_payment_wallet` — final decision
+**Live balances** — Syncs token balances across all chains in real time. USD values powered by CoinGecko.
 
----
+**AI agent** — Claude reasons across your wallets to pick the optimal chain and token for any payment. Prefers L2s to save gas. Uses stablecoins for USD payments. Explains every decision.
 
-## x402 Payments (Session 7)
+**x402 payments** — Drop-in `fetch()` replacement that automatically pays HTTP 402 paywalled APIs. The agent signs, broadcasts, and retries — you just call `fetch()`.
 
-```typescript
-import { X402Client, createAgentSigner } from '@clutch/x402'
-
-const client = new X402Client({
-  signer: createAgentSigner({ apiUrl, token, pocketId }),
-  autoApproveUnderUsd: 5.00,
-})
-
-// This will automatically pay any 402 and retry
-const res = await client.fetch('https://api.example.com/premium-data')
-```
-
-API endpoints:
-```
-POST /pockets/:id/pay            → execute payment from specific wallet
-POST /pockets/:id/pay/agent      → agent resolves + pays in one shot
-```
+**Ledger support** — Full Ledger Nano X/S+ support via BLE (mobile) and USB (web). Private keys never leave the device.
 
 ---
 
@@ -78,13 +58,60 @@ POST /pockets/:id/pay/agent      → agent resolves + pays in one shot
 ```
 clutch/
 ├── apps/
-│   ├── api/    Hono · Drizzle · PostgreSQL (v0.7.0)
-│   ├── web/    Next.js 14 · Tailwind · AI chat UI
-│   └── mobile/ Expo (Session 8)
+│   ├── api/      Hono · Drizzle ORM · PostgreSQL  (v0.7.0)
+│   ├── web/      Next.js 14 · Tailwind             (Sessions 4–7)
+│   └── mobile/   Expo SDK 51 · React Native        (Session 8)
 └── packages/
-    ├── core/              Types · pocket logic · utils
-    ├── wallet-connectors/ EVM + Solana + Registry
-    ├── ai-agent/          Claude tool-use agent
-    ├── x402/              HTTP 402 client + server middleware
-    └── ui/                Shared components
+    ├── core/              Shared types · pocket logic · utils
+    ├── wallet-connectors/ EVM · Solana · Ledger · Trezor · Registry
+    ├── ai-agent/          Claude tool-use agent · executor · analysis
+    ├── x402/              HTTP 402 client · agent signer · server middleware
+    └── ui/                Shared design system components
 ```
+
+---
+
+## API surface (v0.7.0)
+
+```
+POST /auth/register|login
+GET|POST|DELETE /pockets
+POST /pockets/:id/wallets          ADD wallet
+DELETE /pockets/:id/wallets/:wid   REMOVE wallet
+PATCH /pockets/:id/wallets/:wid/default
+POST /pockets/:id/deposit|withdraw NATIVE FUNDS
+GET  /pockets/:id/balance
+POST /pockets/:id/pay              EXECUTE payment
+POST /pockets/:id/pay/agent        AGENT resolves + pays
+POST /balances/:id/sync            ON-CHAIN sync (background)
+GET  /balances/:id                 CACHED balances + USD totals
+GET  /transactions/:id             TX history
+POST /agent/analyze/:id            POCKET analysis
+POST /agent/resolve-payment        PAYMENT routing decision
+POST /agent/chat/:id               STREAMING SSE chat
+POST /webhook/tx-confirmed         ON-CHAIN confirmation hook
+GET  /health/chains                RPC ping all 6 chains
+```
+
+---
+
+## Supported chains
+
+Ethereum · Base · Polygon · Arbitrum · Optimism · Solana
+
+---
+
+## Tech stack
+
+| Layer | Tech |
+|---|---|
+| API | Hono · Node 20 · TypeScript |
+| DB | PostgreSQL · Drizzle ORM |
+| EVM | viem |
+| Solana | @solana/web3.js + spl-token |
+| Hardware | @ledgerhq/hw-app-eth · hw-app-solana |
+| AI | Anthropic Claude (claude-opus-4-5) |
+| Payments | x402 protocol |
+| Web | Next.js 14 · Tailwind CSS |
+| Mobile | Expo SDK 51 · React Native 0.74 |
+| Monorepo | Turborepo · pnpm workspaces |

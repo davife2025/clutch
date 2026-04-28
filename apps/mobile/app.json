@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Clutch",
+    "slug": "clutch",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "clutch",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0a"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.clutch.app",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "Clutch uses Bluetooth to connect to your Ledger hardware wallet.",
+        "NSFaceIDUsageDescription": "Clutch uses Face ID to protect your wallet access."
+      }
+    },
+    "android": {
+      "package": "com.clutch.app",
+      "permissions": ["BLUETOOTH", "BLUETOOTH_ADMIN", "BLUETOOTH_CONNECT", "BLUETOOTH_SCAN"]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-local-authentication",
+      ["react-native-ble-plx", { "isBackgroundEnabled": false }]
+    ],
+    "extra": {
+      "eas": { "projectId": "your-eas-project-id" }
+    }
+  }
+}

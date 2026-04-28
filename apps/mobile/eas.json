@@ -1,0 +1,23 @@
+{
+  "cli": { "version": ">= 10.0.0" },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": { "EXPO_PUBLIC_API_URL": "http://localhost:3001" }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": { "EXPO_PUBLIC_API_URL": "https://api.clutch.app" }
+    },
+    "production": {
+      "env": { "EXPO_PUBLIC_API_URL": "https://api.clutch.app" }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": { "appleId": "your@apple.id", "ascAppId": "your-app-store-id" },
+      "android": { "serviceAccountKeyPath": "./service-account.json", "track": "production" }
+    }
+  }
+}
