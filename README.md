@@ -60,3 +60,5 @@ Hono · PostgreSQL · Drizzle · @solana/web3.js · @solana/spl-token · viem (E
 
 | 19 | Realms DAO governance · proposals · voting power · cast vote | ✅ |
 | 20 | Chrome extension · Manifest V3 · Wallet Standard injection · popup wallet | ✅ |
+| 21 | Solana Pay · payment links · QR codes · POS terminal · tx verification | ✅ |
+| 22 | Cross-chain bridge · Wormhole · Mayan Finance · quote aggregator · history | ✅ |

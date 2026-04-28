@@ -22,6 +22,8 @@ import { nftRoutes }          from './routes/nfts.js'
 import { dappRoutes }         from './routes/dapps.js'
 import { stakingRoutes }      from './routes/staking.js'
 import { governanceRoutes }   from './routes/governance.js'
+import { solanaPayRoutes }    from './routes/solanapay.js'
+import { bridgeRoutes }       from './routes/bridge.js'
 import { errorMiddleware }   from './middleware/error.js'
 import { startPollers }      from './services/realtime.service.js'
 
@@ -32,7 +34,7 @@ app.use('*', cors({ origin: process.env.CORS_ORIGIN ?? '*' }))
 app.use('*', errorMiddleware)
 
 app.get('/health', (c) =>
-  c.json({ status: 'ok', service: 'clutch-api', version: '0.20.0', timestamp: new Date().toISOString() })
+  c.json({ status: 'ok', service: 'clutch-api', version: '0.22.0', timestamp: new Date().toISOString() })
 )
 
 app.route('/health',       healthRoutes)
@@ -56,6 +58,8 @@ app.route('/nfts',         nftRoutes)
 app.route('/dapps',        dappRoutes)
 app.route('/staking',      stakingRoutes)
 app.route('/governance',   governanceRoutes)
+app.route('/pay',          solanaPayRoutes)
+app.route('/bridge',       bridgeRoutes)
 
 app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Route not found' } }, 404))
 
@@ -63,7 +67,7 @@ app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Route not fou
 startPollers()
 
 const port = Number(process.env.PORT ?? 3001)
-console.log(`🫙  Clutch API v0.20.0  →  http://localhost:${port}`)
+console.log(`🫙  Clutch API v0.22.0  →  http://localhost:${port}`)
 console.log(`   WebSocket          →  ws://localhost:${port}/ws`)
 
 export default { port, fetch: app.fetch }
