@@ -18,6 +18,8 @@ import { teamRoutes }        from './routes/team.js'
 import { proposalRoutes }    from './routes/proposals.js'
 import { subscriptionRoutes } from './routes/subscriptions.js'
 import { analyticsRoutes }    from './routes/analytics.js'
+import { nftRoutes }          from './routes/nfts.js'
+import { dappRoutes }         from './routes/dapps.js'
 import { errorMiddleware }   from './middleware/error.js'
 import { startPollers }      from './services/realtime.service.js'
 
@@ -28,7 +30,7 @@ app.use('*', cors({ origin: process.env.CORS_ORIGIN ?? '*' }))
 app.use('*', errorMiddleware)
 
 app.get('/health', (c) =>
-  c.json({ status: 'ok', service: 'clutch-api', version: '0.14.0', timestamp: new Date().toISOString() })
+  c.json({ status: 'ok', service: 'clutch-api', version: '0.16.0', timestamp: new Date().toISOString() })
 )
 
 app.route('/health',       healthRoutes)
@@ -48,6 +50,8 @@ app.route('/team',         teamRoutes)
 app.route('/proposals',    proposalRoutes)
 app.route('/subscriptions', subscriptionRoutes)
 app.route('/analytics',    analyticsRoutes)
+app.route('/nfts',         nftRoutes)
+app.route('/dapps',        dappRoutes)
 
 app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Route not found' } }, 404))
 
@@ -55,7 +59,7 @@ app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Route not fou
 startPollers()
 
 const port = Number(process.env.PORT ?? 3001)
-console.log(`🫙  Clutch API v0.14.0  →  http://localhost:${port}`)
+console.log(`🫙  Clutch API v0.16.0  →  http://localhost:${port}`)
 console.log(`   WebSocket          →  ws://localhost:${port}/ws`)
 
 export default { port, fetch: app.fetch }

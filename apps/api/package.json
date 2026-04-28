@@ -22,7 +22,9 @@
     "bcryptjs": "^2.4.3",
     "@clutch/defi": "workspace:*",
     "@clutch/multisig": "workspace:*",
-    "@clutch/subscriptions": "workspace:*"
+    "@clutch/subscriptions": "workspace:*",
+    "@clutch/nft": "workspace:*",
+    "@clutch/walletconnect": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.11.0",

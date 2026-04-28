@@ -257,3 +257,23 @@ export const portfolioSnapshots = pgTable('portfolio_snapshots', {
   index('snapshots_pocket_idx').on(t.pocketId),
   index('snapshots_taken_idx').on(t.takenAt),
 ])
+
+// ─── NFT cache (Session 15) ───────────────────────────────────────────────────
+
+export const nftCache = pgTable('nft_cache', {
+  id:           uuid('id').primaryKey().defaultRandom(),
+  walletId:     uuid('wallet_id').notNull().references(() => wallets.id, { onDelete: 'cascade' }),
+  mint:         text('mint').notNull(),
+  name:         text('name').notNull(),
+  symbol:       text('symbol'),
+  uri:          text('uri'),
+  imageUrl:     text('image_url'),
+  collectionAddress: text('collection_address'),
+  collectionName:    text('collection_name'),
+  floorPriceSol:     text('floor_price_sol'),
+  metadataJson: text('metadata_json'),    // full JSON blob
+  fetchedAt:    timestamp('fetched_at').defaultNow().notNull(),
+}, (t) => [
+  index('nft_wallet_idx').on(t.walletId),
+  uniqueIndex('nft_mint_wallet_idx').on(t.mint, t.walletId),
+])

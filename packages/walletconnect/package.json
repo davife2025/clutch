@@ -1,0 +1,13 @@
+{
+  "name": "@clutch/walletconnect",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "scripts": { "build": "tsc", "dev": "tsc --watch" },
+  "dependencies": {
+    "@clutch/core": "workspace:*",
+    "@solana/web3.js": "^1.95.0"
+  }
+}

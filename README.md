@@ -29,7 +29,9 @@ EVM chains (Ethereum, Base, Polygon, Arbitrum, Optimism) are supported as second
 | 11 | Real-time: WebSocket · Expo push · live balance + prices | ✅ |
 | 12 | Multi-sig + team pockets · proposals · audit log · Squads | ✅ |
 | 13 | Token gating + subscriptions · x402 billing · metered usage | ✅ |
-| 14 | Analytics + reporting · P\&L charts · breakdown · CSV export | ✅ |
+| 14 | Analytics + reporting · P&L charts · breakdown · CSV export 
+| 15 | NFT portfolio · DAS client · Metaplex · Magic Eden pricing | ✅ |
+| 16 | WalletConnect + dApp browser · Wallet Standard · session mgmt | ✅ | · P\&L charts · breakdown · CSV export | ✅ |
 
 ---
 
