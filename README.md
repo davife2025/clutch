@@ -27,7 +27,7 @@ EVM chains (Ethereum, Base, Polygon, Arbitrum, Optimism) are supported as second
 | 9 | Test suite (Vitest + Playwright + CI) | ✅ |
 | 10 | DeFi: Jupiter swaps · yield · gas tracker · price alerts | ✅ |
 | 11 | Real-time: WebSocket · Expo push · live balance + prices | ✅ |
-| 12 | Multi-sig + team pockets | 🔜 Next |
+| 12 | Multi-sig + team pockets · proposals · audit log · Squads | ✅ |
 
 ---
 

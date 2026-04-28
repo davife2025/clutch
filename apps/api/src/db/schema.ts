@@ -105,3 +105,83 @@ export type WalletRow      = typeof wallets.$inferSelect
 export type NewWalletRow   = typeof wallets.$inferInsert
 export type TransactionRow = typeof transactions.$inferSelect
 export type NewTransactionRow = typeof transactions.$inferInsert
+
+// ─── Team pockets (Session 12) ────────────────────────────────────────────────
+
+export const memberRoleEnum = pgEnum('member_role', ['owner', 'admin', 'signer', 'viewer'])
+export const proposalStatusEnum = pgEnum('proposal_status', ['pending', 'approved', 'rejected', 'expired', 'executed'])
+export const proposalTypeEnum   = pgEnum('proposal_type',   ['payment', 'add_member', 'remove_member', 'change_threshold', 'change_limit'])
+
+export const teamPockets = pgTable('team_pockets', {
+  id:              uuid('id').primaryKey().defaultRandom(),
+  name:            text('name').notNull(),
+  description:     text('description'),
+  threshold:       integer('threshold').notNull().default(2),
+  createdBy:       uuid('created_by').notNull().references(() => users.id),
+  onChainAddress:  text('on_chain_address'),
+  chain:           chainIdEnum('chain').notNull().default('solana'),
+  createdAt:       timestamp('created_at').defaultNow().notNull(),
+  updatedAt:       timestamp('updated_at').defaultNow().notNull(),
+})
+
+export const teamMembers = pgTable('team_members', {
+  id:           uuid('id').primaryKey().defaultRandom(),
+  teamPocketId: uuid('team_pocket_id').notNull().references(() => teamPockets.id, { onDelete: 'cascade' }),
+  userId:       uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  role:         memberRoleEnum('role').notNull().default('signer'),
+  /** Daily USD spending limit. null = unlimited */
+  spendLimitUsd: integer('spend_limit_usd'),
+  joinedAt:     timestamp('joined_at').defaultNow().notNull(),
+}, (t) => [
+  index('team_members_pocket_idx').on(t.teamPocketId),
+  uniqueIndex('team_members_unique_idx').on(t.teamPocketId, t.userId),
+])
+
+export const proposals = pgTable('proposals', {
+  id:            uuid('id').primaryKey().defaultRandom(),
+  teamPocketId:  uuid('team_pocket_id').notNull().references(() => teamPockets.id, { onDelete: 'cascade' }),
+  type:          proposalTypeEnum('type').notNull(),
+  status:        proposalStatusEnum('status').notNull().default('pending'),
+  title:         text('title').notNull(),
+  description:   text('description'),
+  proposedBy:    uuid('proposed_by').notNull().references(() => users.id),
+  payload:       text('payload').notNull(),  // JSON
+  approvals:     text('approvals').notNull().default('[]'),    // JSON array
+  rejections:    text('rejections').notNull().default('[]'),   // JSON array
+  txHash:        text('tx_hash'),
+  expiresAt:     timestamp('expires_at').notNull(),
+  executedAt:    timestamp('executed_at'),
+  createdAt:     timestamp('created_at').defaultNow().notNull(),
+}, (t) => [
+  index('proposals_pocket_idx').on(t.teamPocketId),
+  index('proposals_status_idx').on(t.status),
+])
+
+export const auditLog = pgTable('audit_log', {
+  id:           uuid('id').primaryKey().defaultRandom(),
+  teamPocketId: uuid('team_pocket_id').notNull().references(() => teamPockets.id, { onDelete: 'cascade' }),
+  action:       text('action').notNull(),
+  actorId:      uuid('actor_id').notNull().references(() => users.id),
+  actorEmail:   text('actor_email').notNull(),
+  description:  text('description').notNull(),
+  metadata:     text('metadata'),   // JSON
+  ts:           timestamp('ts').defaultNow().notNull(),
+}, (t) => [
+  index('audit_pocket_idx').on(t.teamPocketId),
+  index('audit_ts_idx').on(t.ts),
+])
+
+export const spendingWindows = pgTable('spending_windows', {
+  id:          uuid('id').primaryKey().defaultRandom(),
+  userId:      uuid('user_id').notNull().references(() => users.id),
+  pocketId:    uuid('pocket_id').notNull().references(() => teamPockets.id, { onDelete: 'cascade' }),
+  periodStart: timestamp('period_start').notNull(),
+  spentUsd:    integer('spent_usd').notNull().default(0),
+}, (t) => [
+  uniqueIndex('spending_window_unique_idx').on(t.userId, t.pocketId, t.periodStart),
+])
+
+export type TeamPocketRow  = typeof teamPockets.$inferSelect
+export type TeamMemberRow  = typeof teamMembers.$inferSelect
+export type ProposalRow    = typeof proposals.$inferSelect
+export type AuditLogRow    = typeof auditLog.$inferSelect
